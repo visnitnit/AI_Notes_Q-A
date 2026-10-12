@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Quiz Result · {{ note.title }}{% endblock %}
+{% block content %}
+<section class="hero compact"><p class="eyebrow">QUIZ COMPLETE</p><h1>Your result</h1><p class="muted">{{ note.title }}</p></section>
+<div class="panel result-panel"><div class="score">{{ score }}<span>/ {{ questions|length }}</span></div><h2>{{ (score / questions|length * 100)|round|int if questions else 0 }}% score</h2><p class="muted">Your attempt has been saved to Progress.</p><a class="button" href="{{ url_for('quiz', note_id=note.id) }}">Try again</a> <a class="button secondary" href="{{ url_for('note_detail', note_id=note.id) }}">Back to notes</a></div>
+<div class="panel answer-review"><h2>Answer review</h2>
+{% for q in questions %}
+<div class="review-item"><p><strong>{{ loop.index }}.</strong> {{ q.text }}</p><p class="{{ 'correct-text' if answers.get('q' ~ loop.index0) == q.correct_index|string else 'danger-text' }}">Correct answer: {{ q.options[q.correct_index] }}</p></div>
+{% endfor %}
+</div>
+{% endblock %}

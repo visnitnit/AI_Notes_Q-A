@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}{{ note.title }} · NoteWise AI{% endblock %}
+{% block content %}
+<div class="breadcrumb"><a href="{{ url_for('index') }}">My Notes</a> / {{ note.title }}</div>
+<section class="note-header">
+  <div><p class="eyebrow">STUDY WORKSPACE</p><h1>{{ note.title }}</h1><p class="muted">{{ note.pages|length }} pages · Uploaded {{ note.created_at }}</p></div>
+  <a class="button secondary" href="{{ url_for('quiz', note_id=note.id) }}">Generate practice quiz ↗</a>
+</section>
+<div class="workspace">
+  <section class="panel chat-panel">
+    <div class="panel-title"><div class="sparkle">✦</div><div><h2>Ask your notes</h2><p class="muted small">Answers are retrieved from this PDF and include page references.</p></div></div>
+    <div id="chat-log" class="chat-log" data-note-id="{{ note.id }}">
+      <div class="chat-message assistant"><strong>NoteWise AI</strong><p>Hi! Ask me anything about this document. I’ll look for relevant passages in your notes.</p></div>
+    </div>
+    <form id="question-form" class="question-form">
+      <textarea id="question-input" rows="2" maxlength="1000" placeholder="Ask a question about your notes..." required></textarea>
+      <button class="button" type="submit">Ask question ↑</button>
+    </form>
+    <p class="muted tiny">Tip: include topic names or keywords from your syllabus.</p>
+  </section>
+  <aside class="panel info-panel">
+    <h2>Document overview</h2>
+    <div class="stat"><span>Pages extracted</span><strong>{{ note.pages|length }}</strong></div>
+    <div class="stat"><span>Question answering</span><strong>Ready</strong></div>
+    <div class="stat"><span>Practice</span><a href="{{ url_for('quiz', note_id=note.id) }}">Start quiz →</a></div>
+    <hr>
+    <h3>How it works</h3>
+    <p class="muted small">The system searches your PDF using TF-IDF text similarity, then shows the most relevant passages. It does not invent an answer when no useful evidence is found.</p>
+    <p class="muted tiny">For scanned PDFs, OCR is needed before upload.</p>
+  </aside>
+</div>
+{% endblock %}

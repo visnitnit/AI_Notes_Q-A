@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}My Notes · NoteWise AI{% endblock %}
+{% block content %}
+<section class="hero">
+  <p class="eyebrow">YOUR PERSONAL STUDY ASSISTANT</p>
+  <h1>Ask your notes.<br><span>Understand faster.</span></h1>
+  <p class="muted">Upload a lecture PDF, ask questions grounded in your material, and practise with quick quizzes.</p>
+</section>
+<section class="panel upload-panel">
+  <div><h2>Upload college notes</h2><p class="muted small">PDF only · Maximum 20 MB · Text-based PDFs work best</p></div>
+  <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data" class="upload-form">
+    <label class="field-label" for="title">Note title (optional)</label>
+    <input id="title" name="title" type="text" placeholder="e.g. Operating Systems - Module 3">
+    <label class="file-picker" for="pdf_file"><span>＋</span><strong>Choose a PDF file</strong><small id="file-name">No file selected</small></label>
+    <input id="pdf_file" name="pdf_file" type="file" accept=".pdf,application/pdf" required hidden>
+    <button type="submit" class="button">Upload notes</button>
+  </form>
+</section>
+<section class="section-heading"><div><h2>Your library</h2><p class="muted small">Open a note to ask questions or create a quiz.</p></div><span class="count">{{ notes|length }} notes</span></section>
+{% if notes %}
+<div class="notes-grid">
+  {% for note in notes %}
+  <article class="note-card">
+    <div class="pdf-icon">PDF</div>
+    <h3>{{ note.title }}</h3>
+    <p class="muted small">{{ note.page_count }} pages · Added {{ note.created_at }}</p>
+    <a class="button secondary" href="{{ url_for('note_detail', note_id=note.id) }}">Open notes →</a>
+    <form action="{{ url_for('delete_note_route', note_id=note.id) }}" method="post" onsubmit="return confirm('Delete this note and its history?')"><button class="text-button danger-text" type="submit">Delete</button></form>
+  </article>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state"><div class="empty-icon">↥</div><h3>Your library is waiting</h3><p>Upload your first PDF to get started.</p></div>
+{% endif %}
+{% endblock %}

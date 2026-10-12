@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Progress · NoteWise AI{% endblock %}
+{% block content %}
+<section class="hero compact"><p class="eyebrow">YOUR LEARNING ACTIVITY</p><h1>Progress</h1><p class="muted">Track questions asked and quiz attempts across your notes.</p></section>
+{% if rows %}
+<div class="panel table-panel"><table><thead><tr><th>Note</th><th>Questions asked</th><th>Quiz attempts</th><th>Best score</th></tr></thead><tbody>
+{% for row in rows %}<tr><td><a href="{{ url_for('note_detail', note_id=row.id) }}">{{ row.title }}</a></td><td>{{ row.questions }}</td><td>{{ row.attempts }}</td><td>{{ row.best_score|round|int }}%</td></tr>{% endfor %}
+</tbody></table></div>
+{% else %}<div class="empty-state"><h3>No progress yet</h3><p>Upload notes and ask questions or complete a quiz.</p><a class="button" href="{{ url_for('index') }}">Go to library</a></div>{% endif %}
+{% endblock %}
